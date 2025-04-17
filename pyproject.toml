@@ -1,0 +1,42 @@
+[project]
+name = "python-application-template"
+version = "0.1.0"
+requires-python = ">=3.11.*"
+description = "A Python application template."
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest", "flake8", "isort", "pydocstringformatter", "docsig"]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.flake8]
+max-line-length = 140
+ignore = ["E203", "E226", "E501", "E704", "W503"]
+statistics = true
+exclude = [".git", ".idea", ".pytest_cache", "__pycache__", "docs", ".venv", "tests/*"]
+
+[tool.isort]
+line_length = 120
+profile = "black"
+extend_skip = [".venv"]
+
+[tool.pydocstringformatter]
+max-line-length = 120
+exclude = [
+    ".git/**", ".idea/**", "**/.pytest_cache/**", "**/__pycache__/**", "docs/**",
+    "**/dist/**", ".venv/**", "src/vision_toolbox/view/design/*", "tests/**"
+]
+split-summary-body = false
+style = 'pep257'
+strip-whitespaces = true
+linewrap-full-docstring = true
+final-period = false
+
+[tool.docsig]
+excludes = ["src/vision_toolbox/view/design/*", "docs/**", "tests/**"]
+check-dunders = true
+check-overridden = false
+check-protected = true
