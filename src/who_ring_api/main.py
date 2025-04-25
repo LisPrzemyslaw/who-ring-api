@@ -1,5 +1,5 @@
 def main():
-    pass
+    print("WHO Ring API")
 
 
 if __name__ == "__main__":
