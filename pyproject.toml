@@ -6,7 +6,10 @@ description = "Application for register phone number."
 dependencies = [
     "fastapi",
     "SQLAlchemy",
-    "uvicorn"
+    "uvicorn",
+    "redis",
+    "twilio",
+    "python-dotenv"
 ]
 
 [dependency-groups]
