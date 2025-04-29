@@ -5,6 +5,8 @@ requires-python = ">=3.11"
 description = "Application for register phone number."
 dependencies = [
     "fastapi",
+    "SQLAlchemy",
+    "uvicorn"
 ]
 
 [dependency-groups]
@@ -29,7 +31,7 @@ extend_skip = [".venv"]
 max-line-length = 120
 exclude = [
     ".git/**", ".idea/**", "**/.pytest_cache/**", "**/__pycache__/**", "docs/**",
-    "**/dist/**", ".venv/**", "src/vision_toolbox/view/design/*", "tests/**"
+    "**/dist/**", ".venv/**", "tests/**"
 ]
 split-summary-body = false
 style = 'pep257'
@@ -38,7 +40,7 @@ linewrap-full-docstring = true
 final-period = false
 
 [tool.docsig]
-excludes = ["src/vision_toolbox/view/design/*", "docs/**", "tests/**"]
+excludes = ["docs/**", "tests/**"]
 check-dunders = true
 check-overridden = false
 check-protected = true
