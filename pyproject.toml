@@ -3,7 +3,9 @@ name = "who-ring-api"
 version = "0.1.0"
 requires-python = ">=3.11"
 description = "Application for register phone number."
-dependencies = []
+dependencies = [
+    "fastapi",
+]
 
 [dependency-groups]
 dev = ["pytest", "flake8", "isort", "pydocstringformatter", "docsig"]
