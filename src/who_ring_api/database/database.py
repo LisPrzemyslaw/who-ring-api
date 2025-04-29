@@ -18,7 +18,12 @@ class Phone(_Base):
 
 
 _engine = create_engine(f"sqlite:///{os.path.join(os.path.dirname(os.path.realpath(__file__)), 'database.db')}")
-_Base.metadata.create_all(bind=_engine)
+_Base.metadata.create_all(bind=_engine, checkfirst=True)
 _Session = sessionmaker(bind=_engine)
 
-db_session = _Session()
+def get_db():
+    db = _Session()
+    try:
+        yield db
+    finally:
+        db.close()
