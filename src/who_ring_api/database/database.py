@@ -1,7 +1,8 @@
 import os
+from typing import Generator
 
-from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import Column, String, create_engine
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 _Base = declarative_base()
 
@@ -21,7 +22,16 @@ _engine = create_engine(f"sqlite:///{os.path.join(os.path.dirname(os.path.realpa
 _Base.metadata.create_all(bind=_engine, checkfirst=True)
 _Session = sessionmaker(bind=_engine)
 
-def get_db():
+
+def get_db() -> Generator[Session]:
+    """
+    Provide a database session for use in database operations.
+    This function yields a database session object created using SQLAlchemy's
+    sessionmaker. The session is automatically closed after use, ensuring
+    proper resource management.
+
+    :return: A database session object.
+    """
     db = _Session()
     try:
         yield db

@@ -1,7 +1,8 @@
 import os
 
-from who_ring_api.sms_provider.sms_provider_interface import SmsProviderInterface
 from twilio.rest import Client
+
+from who_ring_api.sms_provider.sms_provider_interface import SmsProviderInterface
 
 
 class TwilioProvider(SmsProviderInterface):
@@ -11,9 +12,7 @@ class TwilioProvider(SmsProviderInterface):
     _TWILIO_PHONE_NUMBER_KEY = "TWILIO_PHONE_NUMBER"
 
     def __init__(self):
-        """
-        Initialize the TwilioProvider with account SID, auth token, and sender number.
-        """
+        """Initialize the TwilioProvider with account SID, auth token, and sender number."""
 
         self.client = Client(os.getenv(TwilioProvider._TWILIO_ACCOUNT_SID), os.getenv(TwilioProvider._TWILIO_AUTH_TOKEN))
         self._twilio_number = os.getenv(TwilioProvider._TWILIO_PHONE_NUMBER_KEY)

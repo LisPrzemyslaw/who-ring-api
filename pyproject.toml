@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest", "flake8", "isort", "pydocstringformatter", "docsig"]
+dev = ["pytest", "flake8", "flake8-pyproject", "isort", "pydocstringformatter", "docsig"]
 
 [build-system]
 requires = ["uv_build"]
@@ -26,12 +26,12 @@ statistics = true
 exclude = [".git", ".idea", ".pytest_cache", "__pycache__", "docs", ".venv", "tests/*"]
 
 [tool.isort]
-line_length = 120
+line_length = 140
 profile = "black"
 extend_skip = [".venv"]
 
 [tool.pydocstringformatter]
-max-line-length = 120
+max-line-length = 140
 exclude = [
     ".git/**", ".idea/**", "**/.pytest_cache/**", "**/__pycache__/**", "docs/**",
     "**/dist/**", ".venv/**", "tests/**"
