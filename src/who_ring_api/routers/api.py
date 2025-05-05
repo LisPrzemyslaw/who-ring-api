@@ -1,6 +1,6 @@
 import os
 
-import redis
+import redis.asyncio as redis
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -51,14 +51,13 @@ async def register_number(request_data: PhoneVerification, db_session: Session =
     """
     if db_session.query(Phone).filter(Phone.phone_number == request_data.phone_number).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Phone number already exists.")
-
-    stored_code = redis_client.get(request_data.phone_number)
+    stored_code = await redis_client.get(request_data.phone_number)
     if not stored_code:
         raise HTTPException(status_code=400, detail="Code expired or not found.")
-    if stored_code != request_data.verification_code:
-        raise HTTPException(status_code=400, detail="Invalid verification code.")
+    if int(stored_code) != request_data.verification_code:
+        raise HTTPException(status_code=400, detail=f"Invalid verification code.")
 
-    await redis_client.delete(request_data.phone)
+    await redis_client.delete(request_data.phone_number)
 
     phone = Phone(phone_number=request_data.phone_number, name=request_data.name)
     db_session.add(phone)
@@ -66,16 +65,23 @@ async def register_number(request_data: PhoneVerification, db_session: Session =
     return PhoneModel(phone_number=str(phone.phone_number), name=str(phone.name))
 
 
-@router.get("/get-number-name")
-async def get_number_name(phone_number: PhoneNumber, db_session: Session = Depends(get_db)) -> PhoneModel:
+@router.get("/get-number-name", response_model=PhoneModel, status_code=status.HTTP_200_OK)
+async def get_number_name(phone_number: str, db_session: Session = Depends(get_db)) -> PhoneModel:
     """
     This endpoint retrieves the name associated with a given phone number from the database.
 
-    :param phone_number: The phone number to look up.
-    :param db_session: A database session used to query and interact with the database.
+    :param phone_number: The phone number to look up. With a country code.
+    :param db_session: A database session is used to query and interact with the database.
 
     :return: The pydentic model containing the phone number and associated name.
     """
+    if not phone_number:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Phone number is required")
+    try:
+        PhoneNumber(phone_number=phone_number)  # Validate the phone number format
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid phone number format")
+
     phone = db_session.query(Phone).filter(Phone.phone_number == phone_number).first()
     if not phone:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Phone number not found")

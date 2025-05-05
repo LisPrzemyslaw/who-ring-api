@@ -35,6 +35,7 @@ class PhoneNumber(BaseModel):
 
         :return: valid phone number
         """
+        value = value.strip()
         if not re.match(r'^\+?1?\d{9,15}$', value):
             raise ValueError('Invalid phone number')
         return value
