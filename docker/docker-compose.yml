@@ -10,6 +10,15 @@ services:
     depends_on:
       - redis
 
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+
   redis:
     image: redis:7
     ports:
